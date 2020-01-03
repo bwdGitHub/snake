@@ -15,5 +15,6 @@ class Game {
         unsigned int height;
         unsigned int width;
         void render();
+        void update(char);
 };
 #endif

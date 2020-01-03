@@ -107,3 +107,7 @@ void Game::render()
         std::cout << "\n";
     }
 }
+
+void Game::update(char key){
+    // not implemented
+}

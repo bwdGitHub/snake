@@ -1,4 +1,5 @@
 #include <iostream>
+#include <conio.h>
 #include "Game.hpp"
 
 Game instantiate(int argc, char** argv){
@@ -20,6 +21,19 @@ Game instantiate(int argc, char** argv){
 
 int main(int argc, char** argv){
     Game game = instantiate(argc,argv);
-    game.render();
+    bool quit = false;
+    while(!quit){
+        game.render();
+        // TODO:
+        // This is a hacky way to listen for inputs.
+        // curses/ncurses is a library that's meant to be good for this.
+        char key = getch();
+        if(key=='q'){
+            quit = true;
+        }
+        else{
+            game.update(key);
+        }
+    }
     return 0;
 }
