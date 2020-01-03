@@ -9,7 +9,7 @@ main.o : main.cpp
 Game.o : Game.cpp
 	$(CXX) -c Game.cpp
 
-Snake.o : Snake.cpp
+Snake.o : Snake.cpp Snake.hpp
 	$(CXX) -c Snake.cpp
 
 clean : 
