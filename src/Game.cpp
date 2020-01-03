@@ -43,7 +43,7 @@ char renderMap(ScreenCode c)
     }
 }
 
-Snake initialSnake(){
+Snake initialSnake(unsigned int h, unsigned int w){
     // Initialize Snake
     // TODO: do this randomly
     // TODO: also check it's on-screen
@@ -52,11 +52,11 @@ Snake initialSnake(){
     std::vector<std::pair<int,int>> body;
     body.push_back(body1);
     body.push_back(body2);
-    Snake snake = Snake(body, Direction::UP);
+    Snake snake = Snake(body, Direction::UP, h, w);
     return snake;
 }
 
-Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake()}
+Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake(h,w)}
 {
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
@@ -144,13 +144,6 @@ void Game::update(char key){
         Direction newDirection = keyToDirection(key);
         snake.setDirection(newDirection);
     }
-    // TODO:
-    // The design here seems to be more complex than necessary
-    // Surely with "head" and "direction" takeStep doesn't need any other arguments?
-    // std::pair<int,int> pos;
-    // std::pair<int,int> head = snake.head();
-    // // TODO: fake update for now.
-    // pos.first = head.first+1;
-    // pos.second = head.second;    
     snake.takeStep();
+
 }
