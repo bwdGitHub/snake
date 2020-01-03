@@ -65,7 +65,6 @@ void Snake::takeStep(std::pair<int,int> applePos){
     if(body[0]==applePos){        
         body.push_back(tail);
     }
-    std::cout << body.size() << "\n";
 }
 
 void Snake::setDirection(Direction d){
