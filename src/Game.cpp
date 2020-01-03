@@ -158,6 +158,7 @@ void Game::update(char key){
     }
     bool appleHit = snake.takeStep(apple.position);
     if(appleHit){
+        // TODO - use a PRNG here.
         apple.position = std::make_pair(4,5);
     }
 
