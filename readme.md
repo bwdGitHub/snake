@@ -11,3 +11,10 @@ Credit to [/u/yngwiepalpateen](https://www.reddit.com/user/yngwiepalpateen)'s [c
 ## Implementation
 ### Language
 Going to try this in C++. Why? Because I'm trying to learn it.
+
+## Compilation
+Source code will be in the *src* directory.
+
+I'm using MinGW g++ on Windows.
+
+I intend to use makefiles + gnu make.
