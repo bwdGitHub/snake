@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "Game.cpp"
+#include "Game.hpp"
 
 TEST(Game,UnsignedInt){
     // Can construct Game with unsigned ints
