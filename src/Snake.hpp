@@ -3,6 +3,12 @@
 #include <vector>
 #include <utility>
 
+// TODO:
+// A lot of implementation details (vector, std::pair) have bled into the header
+// Is that ok? It's mostly needed to specify types so either:
+// 1. Template out all "implementation detail" types.
+// 2. Manually write a wrapper type/interface
+
 enum class Direction;
 
 class Snake{
