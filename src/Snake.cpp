@@ -32,6 +32,10 @@ std::pair<int,int> directionToPair(Direction d){
     return step;
 }
 
+int mod(int a, int b){
+    return (a%b + b)%b;
+}
+
 // TODO: 
 // is vector best for popping and inserting at the front?
 // There's probably a nicer way to do it without shifting everything.
@@ -48,6 +52,10 @@ void Snake::takeStep(){
     // Now update the head
     body[0].first += step.first;
     body[0].second += step.second;
+    // Wrap through the walls
+    // To be on the interior the position needs to be between 1 and boundary-1.
+    body[0].first = 1+mod(body[0].first-1,height-2);
+    body[0].second = 1+mod(body[0].second-1,width-2);
 }
 
 void Snake::setDirection(Direction d){
