@@ -40,13 +40,18 @@ int mod(int a, int b){
 // is vector best for popping and inserting at the front?
 // There's probably a nicer way to do it without shifting everything.
 
-void Snake::takeStep(){    
+void Snake::takeStep(std::pair<int,int> applePos){    
     std::pair<int,int> step = directionToPair(direction);
+    
+    // May need the tail later - in case apple hit
+    std::pair<int,int> tail = body[body.size()-1];
+    
     // TODO:
     // This whole thing can almost certainly be done better.     
     // The movement is "head follows step, body moves up one"
     // First do the body  
-    for(auto i=1;i<body.size();i++){
+    for(auto i=body.size()-1;i>0;i--){
+        // have to iterate backwards here...
         body[i] = body[i-1];
     }
     // Now update the head
@@ -56,6 +61,11 @@ void Snake::takeStep(){
     // To be on the interior the position needs to be between 1 and boundary-1.
     body[0].first = 1+mod(body[0].first-1,height-2);
     body[0].second = 1+mod(body[0].second-1,width-2);
+
+    if(body[0]==applePos){        
+        body.push_back(tail);
+    }
+    std::cout << body.size() << "\n";
 }
 
 void Snake::setDirection(Direction d){

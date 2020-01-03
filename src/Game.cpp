@@ -156,6 +156,6 @@ void Game::update(char key){
         Direction newDirection = keyToDirection(key);
         snake.setDirection(newDirection);
     }
-    snake.takeStep();
+    snake.takeStep(apple.position);
 
 }
