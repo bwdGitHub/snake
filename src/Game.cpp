@@ -7,7 +7,9 @@ enum class ScreenCode
     EMPTY,
     VERT_WALL,
     HORIZ_WALL,
-    CORNER
+    CORNER,
+    SNAKE_HEAD,
+    SNAKE_BODY
 };
 
 char renderMap(ScreenCode c)
@@ -30,12 +32,31 @@ char renderMap(ScreenCode c)
     case ScreenCode::CORNER:
         return '+';
 
+    case ScreenCode::SNAKE_BODY:
+        return 'O';
+        
+    case ScreenCode::SNAKE_HEAD:
+        return 'X';
+
     default:
         return ' ';
     }
 }
 
-Game::Game(unsigned int h, unsigned int w):height{h},width{w}
+Snake initialSnake(){
+    // Initialize Snake
+    // TODO: do this randomly
+    // TODO: also check it's on-screen
+    std::pair<int,int> body1{1,1};
+    std::pair<int,int> body2{2,1};
+    std::vector<std::pair<int,int>> body;
+    body.push_back(body1);
+    body.push_back(body2);
+    Snake snake = Snake(body, Direction::UP);
+    return snake;
+}
+
+Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake()}
 {   
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
@@ -61,13 +82,22 @@ Game::Game(unsigned int h, unsigned int w):height{h},width{w}
                     c = ScreenCode::HORIZ_WALL;
                 }
             }
-            screen[row].push_back(c);
+            screen[row].push_back(c);            
         }
     }
+    // Separate loop over Snake body.
+    // TODO: clean this up, also there's bound to be a better way.
+    std::vector<std::pair<int,int>> body = snake.body;
+    for(auto pos : body){
+        screen[pos.first][pos.second] = ScreenCode::SNAKE_BODY;
+    }
+    // More wastefulness here - just overwrite the head
+    std::pair<int,int> head = snake.head();
+    screen[head.first][head.second] = ScreenCode::SNAKE_HEAD;
 }
 
 void Game::render()
-{
+{   
     for (auto row = 0; row < height; row++)
     {
         for (auto col = 0; col < width; col++)

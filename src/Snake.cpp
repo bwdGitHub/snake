@@ -1,12 +1,5 @@
 #include "Snake.hpp"
 
-enum class Direction{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
-
 Snake::Snake(std::vector<std::pair<int,int>> b,Direction d) : body{b}, direction{d} {}
 
 // TODO: 
