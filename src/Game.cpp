@@ -57,7 +57,7 @@ Snake initialSnake(){
 }
 
 Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake()}
-{   
+{
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
     {
@@ -85,6 +85,18 @@ Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake
             screen[row].push_back(c);            
         }
     }
+}
+
+void Game::render()
+{   
+    // Have to clear the screen to kill the previous snake
+    // TODO: Again - got to be a better way.
+    for(auto row = 1; row<height-1; row++){
+        for(auto col = 1; col<width-1; col++){
+            screen[row][col] = ScreenCode::EMPTY;
+        }
+    }
+
     // Separate loop over Snake body.
     // TODO: clean this up, also there's bound to be a better way.
     std::vector<std::pair<int,int>> body = snake.body;
@@ -94,10 +106,7 @@ Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake
     // More wastefulness here - just overwrite the head
     std::pair<int,int> head = snake.head();
     screen[head.first][head.second] = ScreenCode::SNAKE_HEAD;
-}
 
-void Game::render()
-{   
     for (auto row = 0; row < height; row++)
     {
         for (auto col = 0; col < width; col++)
@@ -108,6 +117,40 @@ void Game::render()
     }
 }
 
+enum class Exception{
+    UNKNOWN_KEY
+};
+
+Direction keyToDirection(char key){
+    // Simple switch
+    // Map better?    
+    switch(key){
+        case 'w':
+            return Direction::UP;
+        case 'a':
+            return Direction::LEFT;
+        case 's':
+            return Direction::DOWN;
+        case 'd':
+            return Direction::RIGHT;
+        default:
+            throw Exception::UNKNOWN_KEY;
+    }
+}
+
 void Game::update(char key){
-    // not implemented
+    // TODO: lowercase the key
+    if(key=='w'||key=='a'||key=='s'||key=='d'){
+        Direction newDirection = keyToDirection(key);
+        snake.setDirection(newDirection);
+    }
+    // TODO:
+    // The design here seems to be more complex than necessary
+    // Surely with "head" and "direction" takeStep doesn't need any other arguments?
+    // std::pair<int,int> pos;
+    // std::pair<int,int> head = snake.head();
+    // // TODO: fake update for now.
+    // pos.first = head.first+1;
+    // pos.second = head.second;    
+    snake.takeStep();
 }
