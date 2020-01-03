@@ -1,10 +1,6 @@
 #include <iostream>
 #include "Game.hpp"
 
-class Snake {};
-
-class Apple {};
-
 Game instantiate(int argc, char** argv){
     // TODO
     // Validate inputs 
