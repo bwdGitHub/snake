@@ -1,5 +1,6 @@
 #include "Snake.hpp"
 #include <iostream>
+#include <algorithm>
 
 Snake::Snake(std::vector<std::pair<int,int>> b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
 
@@ -61,6 +62,19 @@ void Snake::takeStep(std::pair<int,int> applePos){
     // To be on the interior the position needs to be between 1 and boundary-1.
     body[0].first = 1+mod(body[0].first-1,height-2);
     body[0].second = 1+mod(body[0].second-1,width-2);
+
+    // Self intersection logic
+    auto iter = find(body.begin()+1,body.end(),body[0]);
+    if(iter!=body.end()){
+        // TODO: need to propagate back up to Game or main to say
+        // Game over
+        // A neat hack would be to throw an exception,
+        // catch it in main
+        // and then have the "game over" logic.
+        // That seems like it might be dodgy though.
+        // In any case this is a simple proof of concept for now.
+        std::cout << "you lose" << "\n";
+    }
 
     if(body[0]==applePos){        
         body.push_back(tail);
