@@ -2,6 +2,7 @@
 #define GAME_H
 #include <vector>
 #include "Snake.hpp"
+#include "Apple.hpp"
 
 enum class ScreenCode;
 
@@ -10,6 +11,7 @@ class Game {
         std::vector<std::vector<ScreenCode>> screen;
         // TODO: Should member objects be references?
         Snake snake;
+        Apple apple;
     public:
         Game(unsigned int, unsigned int);
         unsigned int height;

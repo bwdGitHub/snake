@@ -9,7 +9,8 @@ enum class ScreenCode
     HORIZ_WALL,
     CORNER,
     SNAKE_HEAD,
-    SNAKE_BODY
+    SNAKE_BODY,
+    APPLE
 };
 
 char renderMap(ScreenCode c)
@@ -38,6 +39,9 @@ char renderMap(ScreenCode c)
     case ScreenCode::SNAKE_HEAD:
         return 'X';
 
+    case ScreenCode::APPLE:
+        return '@';
+
     default:
         return ' ';
     }
@@ -56,8 +60,13 @@ Snake initialSnake(unsigned int h, unsigned int w){
     return snake;
 }
 
-Game::Game(unsigned int h, unsigned int w):height{h},width{w},snake{initialSnake(h,w)}
+Game::Game(unsigned int h, unsigned int w):
+    height{h},
+    width{w},
+    snake{initialSnake(h,w)},
+    apple{Apple(std::make_pair(3,4))}
 {
+
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
     {
@@ -96,6 +105,9 @@ void Game::render()
             screen[row][col] = ScreenCode::EMPTY;
         }
     }
+
+    // Render apple
+    screen[apple.position.first][apple.position.second] = ScreenCode::APPLE;
 
     // Separate loop over Snake body.
     // TODO: clean this up, also there's bound to be a better way.
