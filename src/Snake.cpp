@@ -1,7 +1,7 @@
 #include "Snake.hpp"
 #include <iostream>
 
-Snake::Snake(std::vector<std::pair<int,int>> b,Direction d) : body{b}, direction{d} {}
+Snake::Snake(std::vector<std::pair<int,int>> b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
 
 enum class Exception{
     UNKNOWN_DIRECTION

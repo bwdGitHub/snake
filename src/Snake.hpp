@@ -18,10 +18,14 @@ enum class Direction{
 
 class Snake{
     Direction direction;
+    // Details of the screen need to be known to let Snake do the bounds checking.
+    // Not sure that's ideal?
+    unsigned int height;
+    unsigned int width;
 
     public:
         std::vector<std::pair<int,int>> body;
-        Snake(std::vector<std::pair<int,int>>,Direction);
+        Snake(std::vector<std::pair<int,int>>,Direction,unsigned int, unsigned int);
         void takeStep();
         void setDirection(Direction);
         std::pair<int,int> head();
