@@ -41,7 +41,7 @@ int mod(int a, int b){
 // is vector best for popping and inserting at the front?
 // There's probably a nicer way to do it without shifting everything.
 
-void Snake::takeStep(std::pair<int,int> applePos){    
+bool Snake::takeStep(std::pair<int,int> applePos){    
     std::pair<int,int> step = directionToPair(direction);
     
     // May need the tail later - in case apple hit
@@ -76,9 +76,11 @@ void Snake::takeStep(std::pair<int,int> applePos){
         std::cout << "you lose" << "\n";
     }
 
-    if(body[0]==applePos){        
+    bool appleHit = body[0]==applePos;
+    if(appleHit){        
         body.push_back(tail);
     }
+    return appleHit;
 }
 
 void Snake::setDirection(Direction d){

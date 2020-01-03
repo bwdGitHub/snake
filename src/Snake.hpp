@@ -26,7 +26,7 @@ class Snake{
     public:
         std::vector<std::pair<int,int>> body;
         Snake(std::vector<std::pair<int,int>>,Direction,unsigned int, unsigned int);
-        void takeStep(std::pair<int,int>);
+        bool takeStep(std::pair<int,int>);
         void setDirection(Direction);
         std::pair<int,int> head();
 };

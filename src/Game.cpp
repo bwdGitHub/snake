@@ -156,6 +156,9 @@ void Game::update(char key){
         Direction newDirection = keyToDirection(key);
         snake.setDirection(newDirection);
     }
-    snake.takeStep(apple.position);
+    bool appleHit = snake.takeStep(apple.position);
+    if(appleHit){
+        apple.position = std::make_pair(4,5);
+    }
 
 }
