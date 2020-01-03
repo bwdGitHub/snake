@@ -9,13 +9,18 @@
 // 1. Template out all "implementation detail" types.
 // 2. Manually write a wrapper type/interface
 
-enum class Direction;
+enum class Direction{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
 
 class Snake{
-    std::vector<std::pair<int,int>> body;
     Direction direction;
 
     public:
+        std::vector<std::pair<int,int>> body;
         Snake(std::vector<std::pair<int,int>>,Direction);
         void takeStep(std::pair<int,int>);
         void setDirection(Direction);
