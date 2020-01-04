@@ -2,6 +2,9 @@ CXX = g++
 SRC_PATH = ../src
 GTEST_PATH = C:/cpp/googletest/googletest/
 
+# TODO:
+# This can probably be written more efficiently
+
 tGame : tGame.o Game.o Snake.o Apple.o
 	$(CXX) -o tGame tGame.o $(SRC_PATH)/Game.o $(SRC_PATH)/Snake.o $(SRC_PATH)/Apple.o $(GTEST_PATH)/lib/libgtest.a
 
