@@ -25,12 +25,16 @@ TEST(render,NoExcept){
     // TODO:
     // This seems to be failing currently (badly - gtest doesn't even get to finish)
     // Probably because 1x1 is an edge case and I access a value I shouldn't.
-    
+
     // TODO:
     // This prints to std::cout
     // It'd be nice to instead be able to construct game with an arbitrary output buffer.
     EXPECT_NO_THROW(game.render());
 }
+
+// TODO:
+// Currently the game seems to exit badly after collecting too many apples
+// Guess: My "viablePositions" for the apple update ends up empty and I try to access it.
 
 int main(int argc, char** argv){
     ::testing::InitGoogleTest(&argc,argv);
