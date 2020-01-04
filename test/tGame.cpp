@@ -23,6 +23,10 @@ TEST(Game,Int){
 TEST(render,NoExcept){    
     auto game = Game(1,1);
     // TODO:
+    // This seems to be failing currently (badly - gtest doesn't even get to finish)
+    // Probably because 1x1 is an edge case and I access a value I shouldn't.
+    
+    // TODO:
     // This prints to std::cout
     // It'd be nice to instead be able to construct game with an arbitrary output buffer.
     EXPECT_NO_THROW(game.render());
