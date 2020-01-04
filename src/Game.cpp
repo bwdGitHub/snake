@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Game.hpp"
+#include <algorithm>
 
 enum class ScreenCode
 {
@@ -64,7 +65,7 @@ Game::Game(unsigned int h, unsigned int w):
     height{h},
     width{w},
     snake{initialSnake(h,w)},
-    apple{Apple(std::make_pair(3,4))}
+    apple{Apple(std::make_pair(3,4))}    
 {
 
     // Initialize "screen" with EMPTY
@@ -158,8 +159,28 @@ void Game::update(char key){
     }
     bool appleHit = snake.takeStep(apple.position);
     if(appleHit){
-        // TODO - use a PRNG here.
-        apple.position = std::make_pair(4,5);
+        randomizeApplePosition();
     }
 
+}
+
+void Game::randomizeApplePosition(){
+    std::vector<std::pair<int,int>> viablePositions;
+    // TODO:
+    // more bad design -
+    // just loop over all screen positions and don't push back those that are snake.
+    for(int i = 1; i<height-1; i++){        
+        for(int j = 1; j<width-1; j++){
+            std::pair<int,int> p = std::make_pair(i,j);
+            auto iter = find(snake.body.begin(),snake.body.end(),p);
+            if(iter==snake.body.end()){
+                viablePositions.push_back(p);
+            }
+
+        }
+    }
+    int n = viablePositions.size();
+    std::uniform_int_distribution<> dist{1,n};
+    int i = dist(eng);
+    apple.position = viablePositions[i];
 }
