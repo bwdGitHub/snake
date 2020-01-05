@@ -39,6 +39,24 @@ TEST_F(AppleFixture, positionIsSetPublic){
     EXPECT_EQ(apple.position,newPos);
 }
 
+// Apple is now a template - test it with a different implementation
+// TODO: Test with a mock?
+struct FakePair{
+    int first;
+    int second;
+};
+
+TEST(AppleTemplate, canUseNonPair){
+    // Note - this just tests the Apple class.
+    // A higher level (integration?) test would have to check that templated Apple works in Game.
+    FakePair p;
+    p.first = 1;
+    p.second = 2;
+    EXPECT_NO_THROW({
+        Apple<FakePair> a = Apple<FakePair>(p);
+    });
+}
+
 int main(int argc, char** argv){
     ::testing::InitGoogleTest(&argc,argv);
     return RUN_ALL_TESTS();
