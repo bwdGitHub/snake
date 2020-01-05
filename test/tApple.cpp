@@ -20,8 +20,6 @@ INSTANTIATE_TEST_SUITE_P(ConstructorTestSuite,
 // Test fixtures are classes. 
 // TEST_F that specify these classes can access them as child classes.
 
-Apple globalApple = Apple(std::make_pair(1,1));
-
 class AppleFixture : public ::testing::Test{
     // If it is complex to setup the data for tests, a fixture can help.
     // But the fixture will construct each time, so
@@ -31,7 +29,6 @@ class AppleFixture : public ::testing::Test{
     // In general that's probably confusing.
     protected:
         Apple apple = Apple(std::make_pair(1,1));
-        Apple& appleRef = globalApple;
 };
 
 TEST_F(AppleFixture, positionIsSetPublic){
@@ -40,14 +37,6 @@ TEST_F(AppleFixture, positionIsSetPublic){
     apple.position = newPos;
     ASSERT_NE(currentPos,newPos);
     EXPECT_EQ(apple.position,newPos);
-}
-
-TEST_F(AppleFixture, breakReferenceState){
-    appleRef.position = std::make_pair(0,0);
-}
-
-TEST_F(AppleFixture, referenceStateChanged){
-    std::cout << appleRef.position.first << "\n";
 }
 
 int main(int argc, char** argv){
