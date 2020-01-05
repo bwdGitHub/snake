@@ -6,7 +6,7 @@ class ConstructorTest :
 
 TEST_P(ConstructorTest, positionSet){
     // A parameterized test example.
-    Apple apple = Apple(GetParam());
+    Apple<> apple = Apple<>(GetParam());
     EXPECT_EQ(apple.position,GetParam());
 }
 
@@ -28,7 +28,7 @@ class AppleFixture : public ::testing::Test{
     // but then the state of that object can be modified by various tests.
     // In general that's probably confusing.
     protected:
-        Apple apple = Apple(std::make_pair(1,1));
+        Apple<> apple = Apple<>(std::make_pair(1,1));
 };
 
 TEST_F(AppleFixture, positionIsSetPublic){

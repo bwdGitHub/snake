@@ -65,7 +65,7 @@ Game::Game(unsigned int h, unsigned int w):
     height{h},
     width{w},
     snake{initialSnake(h,w)},
-    apple{Apple(std::make_pair(3,4))}    
+    apple{Apple<>(std::make_pair(3,4))}    
 {
 
     // Initialize "screen" with EMPTY

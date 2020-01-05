@@ -2,9 +2,12 @@
 #define APPLE_H
 #include <utility>
 
+template<typename Point=std::pair<int,int>>
 class Apple {
     public:
-        Apple(std::pair<int,int>);
-        std::pair<int,int> position;
+        Apple(Point);
+        Point position;
 };
+
+#include "Apple.tpp"
 #endif

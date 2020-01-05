@@ -12,9 +12,8 @@ class Game {
         std::vector<std::vector<ScreenCode>> screen;
         // TODO: Should member objects be references?
         Snake snake;
-        Apple apple;
-        std::default_random_engine eng {};
-        std::uniform_int_distribution<> randomScreenPosition;
+        Apple<> apple;
+        std::default_random_engine eng {};        
     public:
         Game(unsigned int, unsigned int);
         unsigned int height;
