@@ -37,6 +37,9 @@ TEST(render,NoExcept){
 // Guess: My "viablePositions" for the apple update ends up empty and I try to access it.
 
 int main(int argc, char** argv){
+    // TODO:
+    // This main function shouldn't be necessary if you link with libgtest_main.a
+    // But that doesn't work for me.
     ::testing::InitGoogleTest(&argc,argv);
     return RUN_ALL_TESTS();
 }
