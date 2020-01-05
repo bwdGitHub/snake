@@ -5,11 +5,11 @@ GTEST_PATH = C:/cpp/googletest/googletest/
 # TODO:
 # This can probably be written more efficiently
 
-tGame : tGame.o Game.o Snake.o Apple.o
-	$(CXX) -o tGame tGame.o $(SRC_PATH)/Game.o $(SRC_PATH)/Snake.o $(SRC_PATH)/Apple.o $(GTEST_PATH)/lib/libgtest.a
+tGame : tGame.o Game.o
+	$(CXX) -o tGame tGame.o $(SRC_PATH)/Game.o $(GTEST_PATH)/lib/libgtest.a
 
-tSnake : tSnake.o Snake.o
-	$(CXX) -o tSnake tSnake.o $(SRC_PATH)/Snake.o $(GTEST_PATH)/lib/libgtest.a
+tSnake : tSnake.o Util.o
+	$(CXX) -o tSnake tSnake.o $(SRC_PATH)/Util.o $(GTEST_PATH)/lib/libgtest.a
 
 tApple : tApple.o
 	$(CXX) -o tApple tApple.o $(GTEST_PATH)/lib/libgtest.a
@@ -26,8 +26,8 @@ tApple.o : tApple.cpp
 Game.o :
 	cd $(SRC_PATH) && make Game.o
 
-Snake.o :
-	cd $(SRC_PATH) && make Snake.o
+Util.o :
+	cd $(SRC_PATH) && make Util.o
 
 clean :
 	rm *.o *.exe

@@ -11,7 +11,7 @@ class Game {
     private:
         std::vector<std::vector<ScreenCode>> screen;
         // TODO: Should member objects be references?
-        Snake snake;
+        Snake<> snake;
         Apple<> apple;
         std::default_random_engine eng {};        
     public:

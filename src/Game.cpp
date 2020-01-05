@@ -48,7 +48,7 @@ char renderMap(ScreenCode c)
     }
 }
 
-Snake initialSnake(unsigned int h, unsigned int w){
+Snake<> initialSnake(unsigned int h, unsigned int w){
     // Initialize Snake
     // TODO: do this randomly
     // TODO: also check it's on-screen
@@ -57,7 +57,7 @@ Snake initialSnake(unsigned int h, unsigned int w){
     std::vector<std::pair<int,int>> body;
     body.push_back(body1);
     body.push_back(body2);
-    Snake snake = Snake(body, Direction::UP, h, w);
+    Snake<> snake = Snake<>(body, Direction::UP, h, w);
     return snake;
 }
 

@@ -6,7 +6,7 @@ TEST(Constructor,basicSmall){
     std::pair<int,int> p = std::make_pair(1,2);
     v.push_back(p);
     Direction dir = Direction::UP;
-    Snake snake = Snake(v,dir,5,6);
+    Snake<> snake = Snake<>(v,dir,5,6);
     EXPECT_EQ(snake.body,v);
     EXPECT_EQ(snake.head(),p);
 }
@@ -18,7 +18,7 @@ TEST(Constructor,basicMedium){
         v.push_back(p);
     }
     Direction dir = Direction::DOWN;
-    Snake snake = Snake(v,dir,3,4);
+    Snake<> snake = Snake<>(v,dir,3,4);
     EXPECT_EQ(snake.body,v);
     EXPECT_EQ(snake.head(),v[0]);
 }
@@ -34,7 +34,7 @@ TEST(takeStep,noApple){
     Direction dir = Direction::LEFT;
     // The screen size is provided at construction time for wrap-around logic.
     // Need it big enough here to not wrap.
-    Snake snake = Snake(v,dir,20,20);
+    Snake<> snake = Snake<>(v,dir,20,20);
     // Fake apple position that isn't hit by the head.
     std::pair<int,int> applePos = std::make_pair(11,11);
     snake.takeStep(applePos);
@@ -56,7 +56,7 @@ TEST(takeStep,apple){
     Direction dir = Direction::LEFT;
     // The screen size is provided at construction time for wrap-around logic.
     // Need it big enough here to not wrap.
-    Snake snake = Snake(v,dir,20,20);
+    Snake<> snake = Snake<>(v,dir,20,20);
     // Fake apple position that is hit by the head after step.
     std::pair<int,int> applePos = std::make_pair(1,9);
     snake.takeStep(applePos);
@@ -81,7 +81,7 @@ TEST(takeStep,wrapLogic){
     // Moving RIGHT increases the second of the pair by 1. 
     // To get the "wall" as the next step RIGHT, you need to have a width of v[0].second+2
     // to account for both walls.
-    Snake snake = Snake(v,dir,20,v[0].first+2);
+    Snake<> snake = Snake<>(v,dir,20,v[0].first+2);
     // Fake apple position that isn't hit by the head.
     std::pair<int,int> applePos = std::make_pair(11,11);
     snake.takeStep(applePos);

@@ -1,51 +1,21 @@
+#ifndef SNAKE_TPP
+#define SNAKE_TPP
 #include "Snake.hpp"
 #include <iostream>
 #include <algorithm>
 
-Snake::Snake(std::vector<std::pair<int,int>> b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
-
-enum class Exception{
-    UNKNOWN_DIRECTION
-};
-
-std::pair<int,int> directionToPair(Direction d){
-    // Another switch
-    // TODO:
-    // Map? Store the information on the data itself
-    // e.g. (Direction is a struct holding a pair).
-    std::pair<int,int> step;
-    switch(d){
-        case Direction::UP:
-            step = std::make_pair(-1,0);
-            break;
-        case Direction::DOWN:
-            step = std::make_pair(1,0);
-            break;
-        case Direction::LEFT:
-            step = std::make_pair(0,-1);
-            break;
-        case Direction::RIGHT:
-            step = std::make_pair(0,1);
-            break;
-        default:
-            throw Exception::UNKNOWN_DIRECTION;
-    }
-    return step;
-}
-
-int mod(int a, int b){
-    return (a%b + b)%b;
-}
+template<typename Point>
+Snake<Point>::Snake(std::vector<Point> b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
 
 // TODO: 
 // is vector best for popping and inserting at the front?
 // There's probably a nicer way to do it without shifting everything.
-
-bool Snake::takeStep(std::pair<int,int> applePos){    
-    std::pair<int,int> step = directionToPair(direction);
+template<typename Point>
+bool Snake<Point>::takeStep(Point applePos){    
+    Point step = directionToPair<>(direction);
     
     // May need the tail later - in case apple hit
-    std::pair<int,int> tail = body[body.size()-1];
+    Point tail = body[body.size()-1];
     
     // TODO:
     // This whole thing can almost certainly be done better.     
@@ -83,10 +53,48 @@ bool Snake::takeStep(std::pair<int,int> applePos){
     return appleHit;
 }
 
-void Snake::setDirection(Direction d){
+template<typename Point>
+void Snake<Point>::setDirection(Direction d){
     direction=d;
 }
 
-std::pair<int,int> Snake::head(){
+template<typename Point>
+Point Snake<Point>::head(){
     return body[0];
 }
+
+// For a specialized implementation, this has to be inlined.
+// I didn't read fully why...
+// See https://stackoverflow.com/questions/48402633/why-do-templates-specialisations-need-to-be-inlined
+template<> inline
+std::pair<int,int> makePoint(int a, int b){
+    return std::make_pair(a,b);
+}
+
+template<typename Point>
+Point directionToPair(Direction d){
+    // Another switch
+    // TODO:
+    // Map? Store the information on the data itself
+    // e.g. (Direction is a struct holding a pair).
+    Point step;
+    switch(d){
+        case Direction::UP:
+            step = makePoint<Point>(-1,0);
+            break;
+        case Direction::DOWN:
+            step = makePoint<Point>(1,0);
+            break;
+        case Direction::LEFT:
+            step = makePoint<Point>(0,-1);
+            break;
+        case Direction::RIGHT:
+            step = makePoint<Point>(0,1);
+            break;
+        default:
+            throw SnakeException::UNKNOWN_DIRECTION;
+    }
+    return step;
+}
+
+#endif
