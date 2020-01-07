@@ -4,14 +4,14 @@
 #include <iostream>
 #include <algorithm>
 
-template<typename Point>
-Snake<Point>::Snake(std::vector<Point> b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
+template<typename Point,typename Container>
+Snake<Point,Container>::Snake(Container b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
 
 // TODO: 
 // is vector best for popping and inserting at the front?
 // There's probably a nicer way to do it without shifting everything.
-template<typename Point>
-bool Snake<Point>::takeStep(Point applePos){    
+template<typename Point,typename Container>
+bool Snake<Point,Container>::takeStep(Point applePos){    
     Point step = directionToPair<>(direction);
     
     // May need the tail later - in case apple hit
@@ -53,13 +53,13 @@ bool Snake<Point>::takeStep(Point applePos){
     return appleHit;
 }
 
-template<typename Point>
-void Snake<Point>::setDirection(Direction d){
+template<typename Point,typename Container>
+void Snake<Point,Container>::setDirection(Direction d){
     direction=d;
 }
 
-template<typename Point>
-Point Snake<Point>::head(){
+template<typename Point,typename Container>
+Point Snake<Point,Container>::head(){
     return body[0];
 }
 

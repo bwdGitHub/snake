@@ -5,10 +5,8 @@
 #include "Util.hpp"
 
 // TODO:
-// A lot of implementation details (vector, std::pair) have bled into the header
-// Is that ok? It's mostly needed to specify types so either:
-// 1. Template out all "implementation detail" types.
-// 2. Manually write a wrapper type/interface
+// 1. Manually write a wrapper type/interface for the default templates (std::pair<int,int> and std::vector<Point>)
+// 2. Evaluate and test using a different container to std::vector<Point>. I think without 1. such a container will have to have a handful of methods with the same names as std::vector.
 
 enum class Direction{
     UP,
@@ -27,7 +25,7 @@ Point makePoint(int,int);
 template<typename Point=std::pair<int,int>>
 Point directionToPair(Direction);
 
-template<typename Point=std::pair<int,int>>
+template<typename Point=std::pair<int,int>, typename Container=std::vector<Point>>
 class Snake{
     Direction direction;
     // Details of the screen need to be known to let Snake do the bounds checking.
@@ -36,8 +34,8 @@ class Snake{
     unsigned int width;
 
     public:
-        std::vector<Point> body;
-        Snake(std::vector<Point>,Direction,unsigned int, unsigned int);
+        Container body;
+        Snake(Container,Direction,unsigned int, unsigned int);
         bool takeStep(Point);
         void setDirection(Direction);
         Point head();
