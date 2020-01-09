@@ -5,8 +5,8 @@ GTEST_PATH = C:/cpp/googletest/googletest/
 # TODO:
 # This can probably be written more efficiently
 
-tGame : tGame.o Game.o
-	$(CXX) -o tGame tGame.o $(SRC_PATH)/Game.o $(GTEST_PATH)/lib/libgtest.a
+tGame : tGame.o Game.o Util.o
+	$(CXX) -o tGame tGame.o $(SRC_PATH)/Util.o $(SRC_PATH)/Game.o $(GTEST_PATH)/lib/libgtest.a
 
 tSnake : tSnake.o Util.o
 	$(CXX) -o tSnake tSnake.o $(SRC_PATH)/Util.o $(GTEST_PATH)/lib/libgtest.a
