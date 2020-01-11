@@ -61,7 +61,7 @@ Snake<> initialSnake(unsigned int h, unsigned int w){
     return snake;
 }
 
-Game::Game(unsigned int h, unsigned int w):
+Game::Game(unsigned int h, unsigned int w):    
     height{h},
     width{w},
     snake{initialSnake(h,w)},
