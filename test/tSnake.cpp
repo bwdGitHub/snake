@@ -92,6 +92,60 @@ TEST(takeStep,wrapLogic){
     EXPECT_EQ(expV,snake.body);
 }
 
+struct FakePoint{
+    int first;
+    int second;
+};
+
+TEST(Point,canUseTemplate){
+    // Verify we can use other implementations of Point.
+    std::vector<FakePoint> body;
+    FakePoint p1{1,1};
+    FakePoint p2{1,2};
+    FakePoint p3{1,3};
+    body.push_back(p1);
+    body.push_back(p2);
+    body.push_back(p3);
+    Direction d = Direction::DOWN;
+    Snake<FakePoint,std::vector<FakePoint>> snake{body,d,10,10};
+    // The verifications are a bit rubbish because FakePoint doesn't implement a good ==.
+    EXPECT_EQ(snake.body.size(),body.size());
+    EXPECT_EQ(snake.body[1].second,p2.second);
+    EXPECT_EQ(p1.first,snake.head().first);
+    EXPECT_EQ(p1.second,snake.head().second);
+}
+
+template<typename T>
+struct FakeContainer{
+    T valToReturn;
+    int fakeSize;
+    FakeContainer push_back(T t){return this;}
+    T operator[](int i){return valToReturn;}
+    int size(){return fakeSize;}
+};
+
+TEST(Container,canUseTemplate){
+    // Verify other implementations of Container can be used.
+    FakePoint p{1,2};
+    FakeContainer<FakePoint> c{p,1};
+    Snake<FakePoint,FakeContainer<FakePoint>> snake{c,Direction::DOWN,3,3};
+    EXPECT_EQ(snake.head().first,c.valToReturn.first);
+    EXPECT_EQ(snake.head().second,c.valToReturn.second);
+}
+
+TEST(setDirection,headAndBodyUnchanged){
+    // Setting the direction should not change the head or body.
+    std::pair<int,int> p1 = std::make_pair(1,2);
+    std::pair<int,int> p2 = std::make_pair(3,4);
+    std::vector<std::pair<int,int>> body{p1,p2};
+    Direction direction = Direction::UP;
+    Snake<> snake{body,direction,5,5};
+    auto initHead = snake.head();
+    snake.setDirection(Direction::DOWN);
+    EXPECT_EQ(snake.body,body);
+    EXPECT_EQ(snake.head(),initHead);
+}
+
 int main(int argc, char** argv){
     ::testing::InitGoogleTest(&argc,argv);
     return RUN_ALL_TESTS();
