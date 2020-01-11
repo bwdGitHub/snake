@@ -2,6 +2,7 @@
 #include <vector>
 #include "Game.hpp"
 #include <algorithm>
+#include <map>
 
 enum class ScreenCode
 {
@@ -14,39 +15,14 @@ enum class ScreenCode
     APPLE
 };
 
-char renderMap(ScreenCode c)
-{
-    // TODO:
-    // Wanted to do this as a map:
-    // std::map<ScreenCode,char> renderMap; renderMap.insert({ScreenCode::EMPTY,' '});
-    // but it wasn't compiling.
-    switch (c)
-    {
-    case ScreenCode::EMPTY:
-        return ' ';
-
-    case ScreenCode::VERT_WALL:
-        return '|';
-
-    case ScreenCode::HORIZ_WALL:
-        return '-';
-
-    case ScreenCode::CORNER:
-        return '+';
-
-    case ScreenCode::SNAKE_BODY:
-        return 'O';
-        
-    case ScreenCode::SNAKE_HEAD:
-        return 'X';
-
-    case ScreenCode::APPLE:
-        return '@';
-
-    default:
-        return ' ';
-    }
-}
+std::map<ScreenCode,char> renderMap{
+    std::make_pair(ScreenCode::EMPTY,' '),
+    std::make_pair(ScreenCode::VERT_WALL,'|'),
+    std::make_pair(ScreenCode::HORIZ_WALL,'-'),
+    std::make_pair(ScreenCode::CORNER,'+'),
+    std::make_pair(ScreenCode::SNAKE_BODY,'o'),
+    std::make_pair(ScreenCode::SNAKE_HEAD,'X'),
+    std::make_pair(ScreenCode::APPLE,'*')};
 
 Snake<> initialSnake(unsigned int h, unsigned int w){
     // Initialize Snake
@@ -124,7 +100,7 @@ void Game::render()
     {
         for (auto col = 0; col < width; col++)
         {
-            std::cout << renderMap(screen[row][col]);
+            std::cout << renderMap[screen[row][col]];
         }
         std::cout << "\n";
     }
