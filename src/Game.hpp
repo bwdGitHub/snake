@@ -13,13 +13,13 @@ class Game {
         // TODO: Should member objects be references?
         Snake<> snake;
         Apple<> apple;
-        std::default_random_engine eng {};        
+        std::default_random_engine eng {}; 
+        void randomizeApplePosition();      
     public:
         Game(unsigned int, unsigned int);
         unsigned int height;
         unsigned int width;
         void render();
         void update(char);
-        void randomizeApplePosition();
 };
 #endif
