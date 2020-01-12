@@ -1,6 +1,7 @@
 #include <iostream>
 #include <conio.h>
 #include "Game.hpp"
+#include <curses.h>
 
 Game instantiate(int argc, char** argv){
     // TODO
@@ -19,7 +20,7 @@ Game instantiate(int argc, char** argv){
     return Game(height,width);
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv){    
     Game game = instantiate(argc,argv);
     bool quit = false;
     while(!quit){
@@ -34,6 +35,6 @@ int main(int argc, char** argv){
         else{
             game.update(key);
         }
-    }
+    }    
     return 0;
 }
