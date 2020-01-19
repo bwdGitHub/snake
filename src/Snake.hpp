@@ -31,7 +31,7 @@ class Snake{
     // Details of the screen need to be known to let Snake do the bounds checking.
     // Not sure that's ideal?
     unsigned int height;
-    unsigned int width;
+    unsigned int width;    
 
     public:
         Container body;
@@ -39,6 +39,7 @@ class Snake{
         bool takeStep(Point);
         void setDirection(Direction);
         Point head();
+        bool hasSelfIntersected;
 };
 
 #include "Snake.tpp"

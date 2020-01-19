@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include <algorithm>
 #include <map>
+#include <chrono>
 
 enum class ScreenCode
 {
@@ -41,9 +42,14 @@ Game::Game(unsigned int h, unsigned int w):
     height{h},
     width{w},
     snake{initialSnake(h,w)},
-    apple{Apple<>(std::make_pair(3,4))}    
+    apple{Apple<>(std::make_pair(-1,-1))}    
 {
-
+    // Randomize the first apple
+    // TODO - abstract out this code.
+    auto time = std::chrono::high_resolution_clock::now();
+    auto seed = static_cast<long unsigned int>(time.time_since_epoch().count());
+    eng.seed(seed);
+    randomizeApplePosition();
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
     {
@@ -113,6 +119,12 @@ void Game::cursesRender(WINDOW * win, char input){
     // TODO: get the chars from renderMap.
     //auto appleChar = renderMap[ScreenCode::APPLE];
     //const char* appleCharPtr = &appleChar;
+    if(snake.hasSelfIntersected){
+        // todo - maybe this should go on the main window
+        // or a separate window.
+        mvwprintw(win,0,0,"you lose");
+        wrefresh(win);
+    }
 
     mvwprintw(win,apple.position.first,apple.position.second,"*");
     for(auto pt:snake.body){

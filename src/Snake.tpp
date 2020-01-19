@@ -5,7 +5,7 @@
 #include <algorithm>
 
 template<typename Point,typename Container>
-Snake<Point,Container>::Snake(Container b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w} {}
+Snake<Point,Container>::Snake(Container b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w}, hasSelfIntersected{false} {}
 
 // TODO: 
 // is vector best for popping and inserting at the front?
@@ -43,7 +43,10 @@ bool Snake<Point,Container>::takeStep(Point applePos){
         // and then have the "game over" logic.
         // That seems like it might be dodgy though.
         // In any case this is a simple proof of concept for now.
-        std::cout << "you lose" << "\n";
+        // TODO
+        // this needs to print to the curses terminal.
+        //std::cout << "you lose" << "\n";
+        hasSelfIntersected = true;
     }
 
     bool appleHit = body[0]==applePos;
