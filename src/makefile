@@ -9,7 +9,7 @@ main.o : main.cpp
 	$(CXX) -c main.cpp -I $(CURSES_INCLUDES)
 
 Game.o : Game.cpp
-	$(CXX) -c Game.cpp
+	$(CXX) -c Game.cpp -I $(CURSES_INCLUDES)
 
 Util.o : Util.cpp
 	$(CXX) -c Util.cpp

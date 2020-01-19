@@ -106,6 +106,22 @@ void Game::render()
     }
 }
 
+void Game::cursesRender(WINDOW * win, char input){
+    wclear(win);
+    box(win,0,0);   
+
+    // TODO: get the chars from renderMap.
+    //auto appleChar = renderMap[ScreenCode::APPLE];
+    //const char* appleCharPtr = &appleChar;
+
+    mvwprintw(win,apple.position.first,apple.position.second,"*");
+    for(auto pt:snake.body){
+        mvwprintw(win,pt.first,pt.second,"O");
+    }
+    mvwprintw(win,snake.head().first,snake.head().second,"X");
+    wrefresh(win);    
+}
+
 enum class Exception{
     UNKNOWN_KEY
 };

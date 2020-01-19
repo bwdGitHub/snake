@@ -20,8 +20,31 @@ Game instantiate(int argc, char** argv){
     return Game(height,width);
 }
 
-int main(int argc, char** argv){    
+int main(int argc, char** argv){
+    // For now just pass a window to the game, and see if I can quit from there
     Game game = instantiate(argc,argv);
+    // Standard initialization
+    initscr();
+    clear();
+    noecho();
+    cbreak();
+    WINDOW *win = newwin(game.height,game.width,0,0);        
+    keypad(win,TRUE);
+    box(win,0,0);
+    wrefresh(win);
+    curs_set(0);
+    // TODO - get speed from input arguments.
+    wtimeout(win,100);
+
+    bool cursesQuit = false;
+    while(!cursesQuit){
+        char input = wgetch(win);
+        cursesQuit = input=='q';
+        game.update(input);
+        game.cursesRender(win,input);                         
+    }
+    refresh();
+    endwin();
     bool quit = false;
     while(!quit){
         game.render();

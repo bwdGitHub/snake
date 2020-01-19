@@ -4,6 +4,7 @@
 #include "Snake.hpp"
 #include "Apple.hpp"
 #include <random>
+#include <curses.h>
 
 enum class ScreenCode;
 
@@ -20,6 +21,7 @@ class Game {
         unsigned int height;
         unsigned int width;
         void render();
+        void cursesRender(WINDOW *,char);
         void update(char);
 };
 #endif
