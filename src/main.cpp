@@ -1,31 +1,20 @@
 #include "Game.hpp"
 #include <curses.h>
 #include <cstring>
+#include <tuple>
 
-Game instantiate(const int argc, const char** argv){
-    // TODO
-    // Validate inputs 
-    // bad inputs will be problematic down the line
-    // e.g. a negative int seems to be readable here 
-    // Does it become a massive unsigned int by overflow
-    // Or just remain negative?
-    // Instead - just ban it.
-    unsigned int height = 8;
-    unsigned int width = 16;
-    if(argc>=3){
+std::tuple<int,int,double> inputParse(int argc, char** argv){
+    int height = 8;
+    int width = 16;
+    double delay = 100;
+    if(argc>2){
         height = std::stoi(argv[1]);
         width = std::stoi(argv[2]);
     }
-    return Game(height,width);
-}
-
-WINDOW* initializeGameWindow(int h,int w,double delay){
-    WINDOW *win = newwin(h,w,0,0);        
-    keypad(win,TRUE);
-    box(win,0,0);
-    wrefresh(win);
-    wtimeout(win,delay);
-    return win;
+    if(argc>3){
+        delay = std::stod(argv[3]);
+    }
+    return std::make_tuple(height,width,delay);
 }
 
 enum class ColorPair{
@@ -35,6 +24,31 @@ enum class ColorPair{
     Game=1,
     Score=2
 };
+
+WINDOW* initializeGameWindow(int h,int w,double delay){
+    // Initialize the main window for the game.
+
+    WINDOW *win = newwin(h,w,0,0);        
+    keypad(win,TRUE);
+    box(win,0,0);
+    wrefresh(win);
+    wtimeout(win,delay);
+    wbkgd(win,COLOR_PAIR(static_cast<short>(ColorPair::Game)));
+    return win;
+}
+
+WINDOW* initializeScoreWindow(int gameHeight, int gameWidth, char scoreStr[]){
+    // Initialize the main window for the scores.
+    // It needs to appear below the game window.
+    // It needs to have at least 3 rows to show the "You Lose" text.
+    // It is nice to have it the same width as the game window.
+
+    WINDOW* win = newwin(3,gameWidth,gameHeight,0);
+    wbkgd(win,COLOR_PAIR(static_cast<short>(ColorPair::Score)));
+    mvwprintw(win, 0, 0, scoreStr);
+    wrefresh(win);
+    return win;
+}
 
 void initCurses(){
     // Initialize conditions for the curses terminal.
@@ -77,36 +91,39 @@ bool startScreenWait(WINDOW* win, char startChar, char quitChar){
     return startGame;
 }
 
-int main(const int argc, const char** argv){
-    // Make argc and argv const so I can re-instantiate game later and know it'll be in the start state.
+int main(int argc, char** argv){
 
-    Game game = instantiate(argc,argv);
+    // R.e. argument parsing, the following are two options
+    // https://www.boost.org/doc/libs/1_36_0/doc/html/program_options.html
+    // https://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Getopt.html
+    // For now I can use a tuple since I'm not trying to be extensive.
+    //
+    // R.e. const - I kind of want to be certain I don't accidentally change the user inputs
+    // For now marking the following variables as const seems to be one way - but it's pretty weak,
+    // you can re-declare these and get no warnings with my currrent compiler options, at least if
+    // the re-declaration is in a new scope (in that case you're just getting a new temp in a new scope)
+
+    const std::tuple<int,int,double> inputs = inputParse(argc,argv);
+    const int height = std::get<0>(inputs);
+    const int width = std::get<1>(inputs);
+    const double delay = std::get<2>(inputs);
+
+    Game game = Game(height,width);
 
     initCurses();
 
     WINDOW* startWin = startWindow(game.width,0,0);
     bool startGame = startScreenWait(startWin,'e','q');
-    if(startGame){
+    if(startGame){        
         wclear(startWin);
         wrefresh(startWin);
         delwin(startWin);
 
-        double delay = 100;
-        if(argc>3){
-            // TODO
-            // The delay is not used if a char is picked up by wgetch
-            // This makes it non-uniform, which is noticeable at slow speed.
-            delay = std::stod(argv[3]);
-        }
-        WINDOW* win = initializeGameWindow(game.height,game.width,delay);
-        WINDOW* scoreWin = newwin(3,game.width,game.height,0);
-        wbkgd(win,COLOR_PAIR(1));
-        wbkgd(scoreWin,COLOR_PAIR(2));
-        wrefresh(scoreWin);
         char scoreStr[] = "Score: ";
         char score[3];
-        mvwprintw(scoreWin,0,0,scoreStr);
-        wrefresh(scoreWin);
+
+        WINDOW* win = initializeGameWindow(game.height,game.width,delay);
+        WINDOW* scoreWin = initializeScoreWindow(game.height,game.width,scoreStr);
 
         bool cursesQuit = false;    
         bool hasLost = false;
@@ -116,7 +133,7 @@ int main(const int argc, const char** argv){
             if(input=='r'){
                 // reset
                 hasLost = false;
-                game = instantiate(argc,argv);
+                game = Game(height,width);
                 // Reset the score window here.
                 // Currently undecided if it's better to have Game do all rendering
                 // Or just use what we know from Game to update for some stuff.
