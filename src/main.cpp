@@ -1,9 +1,6 @@
-#include <iostream>
-#include <conio.h>
 #include "Game.hpp"
 #include <curses.h>
 #include <cstring>
-#include <cstdio>
 
 Game instantiate(int argc, const char** argv){
     // TODO
@@ -76,8 +73,6 @@ int main(const int argc, const char** argv){
         char score[3];
         mvwprintw(scoreWin,0,0,scoreStr);
         wrefresh(scoreWin);
-
-
 
         bool cursesQuit = false;    
         bool hasLost = false;
