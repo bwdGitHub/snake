@@ -2,6 +2,8 @@
 #include <conio.h>
 #include "Game.hpp"
 #include <curses.h>
+#include <cstring>
+#include <cstdio>
 
 Game instantiate(int argc, const char** argv){
     // TODO
@@ -20,13 +22,12 @@ Game instantiate(int argc, const char** argv){
     return Game(height,width);
 }
 
-WINDOW* initializeGameWindow(int h,int w, double delay){
+WINDOW* initializeGameWindow(int h,int w,double delay){
     WINDOW *win = newwin(h,w,0,0);        
     keypad(win,TRUE);
     box(win,0,0);
     wrefresh(win);
     curs_set(0);
-    // TODO - get speed from input arguments.
     wtimeout(win,delay);
     return win;
 }
@@ -43,6 +44,7 @@ int main(const int argc, const char** argv){
     cbreak();
     start_color();
     init_pair(1,COLOR_GREEN,COLOR_BLACK);
+    init_pair(2,COLOR_WHITE,COLOR_BLUE);
 
 
     double delay = 100;
@@ -53,18 +55,47 @@ int main(const int argc, const char** argv){
         delay = std::stod(argv[3]);
     }
     WINDOW* win = initializeGameWindow(game.height,game.width,delay);
+    WINDOW* scoreWin = newwin(3,game.width,game.height,0);
     wbkgd(win,COLOR_PAIR(1));
+    wbkgd(scoreWin,COLOR_PAIR(2));
+    wrefresh(scoreWin);
+    char scoreStr[] = "Score: ";
+    char score[3];
+    mvwprintw(scoreWin,0,0,scoreStr);
+    wrefresh(scoreWin);
+
+
 
     bool cursesQuit = false;    
+    bool hasLost = false;
     while(!cursesQuit){
         char input = wgetch(win);
         cursesQuit = input=='q';
         if(input=='r'){
             // reset
+            hasLost = false;
             game = instantiate(argc,argv);
+            // Reset the score window here.
+            // Currently undecided if it's better to have Game do all rendering
+            // Or just use what we know from Game to update for some stuff.
+            wclear(scoreWin);
+            mvwprintw(scoreWin,0,0,scoreStr);
+            wrefresh(scoreWin);
+        }     
+        if(!hasLost){
+            hasLost = game.update(input);
+            sprintf(score,"%d",game.score);
+            mvwprintw(scoreWin,0,strlen(scoreStr)+1,score);
+            wrefresh(scoreWin);
+            game.cursesRender(win,input); 
         }
-        game.update(input);
-        game.cursesRender(win,input);                         
+        if(hasLost){
+            wclear(scoreWin);
+            mvwprintw(scoreWin,0,0,"You Lose!");
+            mvwprintw(scoreWin,1,0,"'r' - Restart");
+            mvwprintw(scoreWin,2,0,"'q' - Quit");
+            wrefresh(scoreWin);
+        }                        
     }
     refresh();
     endwin();

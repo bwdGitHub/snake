@@ -20,8 +20,9 @@ class Game {
         Game(unsigned int, unsigned int);
         unsigned int height;
         unsigned int width;
+        unsigned int score;
         void render();
         void cursesRender(WINDOW *,char);
-        void update(char);
+        bool update(char);
 };
 #endif

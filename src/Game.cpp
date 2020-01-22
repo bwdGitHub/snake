@@ -114,18 +114,15 @@ void Game::render()
 }
 
 void Game::cursesRender(WINDOW * win, char input){
+    // TODO - Because I clear I think I have to redraw the box on every update
+    // Maybe you can just clear the interior?
+    // Or have a separate "interior" window (would make the wrap-around logic easier)
     wclear(win);
     box(win,0,0);   
 
     // TODO: get the chars from renderMap.
     //auto appleChar = renderMap[ScreenCode::APPLE];
     //const char* appleCharPtr = &appleChar;
-    if(snake.hasSelfIntersected){
-        // todo - maybe this should go on the main window
-        // or a separate window.
-        mvwprintw(win,0,0,"you lose");
-        wrefresh(win);
-    }
 
     mvwprintw(win,apple.position.first,apple.position.second,"*");
     for(auto pt:snake.body){
@@ -156,7 +153,8 @@ Direction keyToDirection(char key){
     }
 }
 
-void Game::update(char key){
+bool Game::update(char key){
+    
     // TODO: lowercase the key
     if(key=='w'||key=='a'||key=='s'||key=='d'){
         Direction newDirection = keyToDirection(key);
@@ -167,6 +165,7 @@ void Game::update(char key){
         score++;
         randomizeApplePosition();
     }
+    return snake.hasSelfIntersected;
 
 }
 
