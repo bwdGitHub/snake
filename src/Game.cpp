@@ -41,6 +41,7 @@ Snake<> initialSnake(unsigned int h, unsigned int w){
 Game::Game(unsigned int h, unsigned int w):    
     height{h},
     width{w},
+    score{0},
     snake{initialSnake(h,w)},
     apple{Apple<>(std::make_pair(-1,-1))}    
 {
@@ -163,6 +164,7 @@ void Game::update(char key){
     }
     bool appleHit = snake.takeStep(apple.position);
     if(appleHit){
+        score++;
         randomizeApplePosition();
     }
 
