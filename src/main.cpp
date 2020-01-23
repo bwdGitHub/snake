@@ -141,23 +141,9 @@ void runGame(Game game, WINDOW* win, WINDOW* scoreWin){
     }
 }
 
-int main(int argc, char** argv){
-
-    // R.e. argument parsing, the following are two options
-    // https://www.boost.org/doc/libs/1_36_0/doc/html/program_options.html
-    // https://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Getopt.html
-    // For now I can use a tuple since I'm not trying to be extensive.
-    //
-    // R.e. const - I kind of want to be certain I don't accidentally change the user inputs
-    // For now marking the following variables as const seems to be one way - but it's pretty weak,
-    // you can re-declare these and get no warnings with my currrent compiler options, at least if
-    // the re-declaration is in a new scope (in that case you're just getting a new temp in a new scope)
-
-    const std::tuple<int,int,double> inputs = inputParse(argc,argv);
-    const int height = std::get<0>(inputs);
-    const int width = std::get<1>(inputs);
-    const double delay = std::get<2>(inputs);
-
+void beginGame(int height, int width, double delay){
+    // Abstract out the main block - I think for testing later it's going to be important
+    // that main is a trivial as possible - it's the one thing I can't get at easy.
     Game game = Game(height,width);
 
     initCurses();
@@ -177,6 +163,29 @@ int main(int argc, char** argv){
         runGame(game,win,scoreWin);
     }
     refresh();
-    endwin();   
+    endwin();
+}
+
+void parseAndBeginGame(int argc, char** argv){
+    // Abstract out everything from main - think this will help testing later.
+
+    // R.e. argument parsing, the following are two options
+    // https://www.boost.org/doc/libs/1_36_0/doc/html/program_options.html
+    // https://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Getopt.html
+    // For now I can use a tuple since I'm not trying to be extensive.
+    //
+    // R.e. const - I kind of want to be certain I don't accidentally change the user inputs
+    // For now marking the following variables as const seems to be one way - but it's pretty weak,
+    // you can re-declare these and get no warnings with my currrent compiler options, at least if
+    // the re-declaration is in a new scope (in that case you're just getting a new temp in a new scope)
+    const std::tuple<int,int,double> inputs = inputParse(argc,argv);
+    const int height = std::get<0>(inputs);
+    const int width = std::get<1>(inputs);
+    const double delay = std::get<2>(inputs);
+    beginGame(height,width,delay);  
+}
+
+int main(int argc, char** argv){
+    parseAndBeginGame(argc,argv);
     return 0;
 }
