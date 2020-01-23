@@ -37,7 +37,7 @@ WINDOW* initializeGameWindow(int h,int w,double delay){
     return win;
 }
 
-WINDOW* initializeScoreWindow(int gameHeight, int gameWidth, char scoreStr[]){
+WINDOW* initializeScoreWindow(int gameHeight, int gameWidth){
     // Initialize the main window for the scores.
     // It needs to appear below the game window.
     // It needs to have at least 3 rows to show the "You Lose" text.
@@ -45,7 +45,6 @@ WINDOW* initializeScoreWindow(int gameHeight, int gameWidth, char scoreStr[]){
 
     WINDOW* win = newwin(3,gameWidth,gameHeight,0);
     wbkgd(win,COLOR_PAIR(static_cast<short>(ColorPair::Score)));
-    mvwprintw(win, 0, 0, scoreStr);
     wrefresh(win);
     return win;
 }
@@ -91,6 +90,57 @@ bool startScreenWait(WINDOW* win, char startChar, char quitChar){
     return startGame;
 }
 
+void reset(Game &game, WINDOW* scoreWin, const char scoreStr[]){
+    // Reset behaviour 
+    // - replace the reference to the game object with it's initial state
+    // - set the score window back to initial state (since this logic happens twice I should abstract it out)
+    game = Game(game.height,game.width);
+    wclear(scoreWin);
+    mvwprintw(scoreWin, 0, 0, scoreStr);
+    wrefresh(scoreWin);
+}
+
+void displayLoseMessage(WINDOW* scoreWin){
+    // Use the score window to show the "Game over" messages.
+    wclear(scoreWin);
+    mvwprintw(scoreWin, 0, 0, "You Lose!");
+    mvwprintw(scoreWin, 1, 0, "'r' - Restart");
+    mvwprintw(scoreWin, 2, 0, "'q' - Quit");
+    wrefresh(scoreWin);
+}
+
+void runGame(Game game, WINDOW* win, WINDOW* scoreWin){
+    // Main game loop.
+    bool cursesQuit = false;
+    bool hasLost = false;
+    char score[3];
+    char scoreStr[] = "Score: ";
+    mvwprintw(scoreWin,0,0,scoreStr);
+    while (!cursesQuit)
+    {
+        char input = wgetch(win);
+        cursesQuit = input == 'q';
+        if (input == 'r')
+        {
+            // reset
+            hasLost = false;
+            reset(game,scoreWin,scoreStr);
+        }
+        if (!hasLost)
+        {
+            hasLost = game.update(input);
+            sprintf(score, "%d", game.score);
+            mvwprintw(scoreWin, 0, strlen(scoreStr) + 1, score);
+            wrefresh(scoreWin);
+            game.cursesRender(win, input);
+        }
+        if (hasLost)
+        {
+            displayLoseMessage(scoreWin);
+        }
+    }
+}
+
 int main(int argc, char** argv){
 
     // R.e. argument parsing, the following are two options
@@ -120,42 +170,11 @@ int main(int argc, char** argv){
         delwin(startWin);
 
         char scoreStr[] = "Score: ";
-        char score[3];
 
         WINDOW* win = initializeGameWindow(game.height,game.width,delay);
-        WINDOW* scoreWin = initializeScoreWindow(game.height,game.width,scoreStr);
+        WINDOW* scoreWin = initializeScoreWindow(game.height,game.width);
 
-        bool cursesQuit = false;    
-        bool hasLost = false;
-        while(!cursesQuit){
-            char input = wgetch(win);
-            cursesQuit = input=='q';
-            if(input=='r'){
-                // reset
-                hasLost = false;
-                game = Game(height,width);
-                // Reset the score window here.
-                // Currently undecided if it's better to have Game do all rendering
-                // Or just use what we know from Game to update for some stuff.
-                wclear(scoreWin);
-                mvwprintw(scoreWin,0,0,scoreStr);
-                wrefresh(scoreWin);
-            }     
-            if(!hasLost){
-                hasLost = game.update(input);
-                sprintf(score,"%d",game.score);
-                mvwprintw(scoreWin,0,strlen(scoreStr)+1,score);
-                wrefresh(scoreWin);
-                game.cursesRender(win,input); 
-            }
-            if(hasLost){
-                wclear(scoreWin);
-                mvwprintw(scoreWin,0,0,"You Lose!");
-                mvwprintw(scoreWin,1,0,"'r' - Restart");
-                mvwprintw(scoreWin,2,0,"'q' - Quit");
-                wrefresh(scoreWin);
-            }                        
-        }
+        runGame(game,win,scoreWin);
     }
     refresh();
     endwin();   
