@@ -3,6 +3,7 @@
 #include "Snake.hpp"
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 template<typename Point,typename Container>
 Snake<Point,Container>::Snake(Container b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w}, hasSelfIntersected{false} {}
@@ -75,28 +76,16 @@ std::pair<int,int> makePoint(int a, int b){
 }
 
 template<typename Point>
+std::map<Direction, Point> directionToPoint{
+    {Direction::UP, makePoint<Point>(-1,0)},
+    {Direction::DOWN, makePoint<Point>(1,0)},
+    {Direction::LEFT, makePoint<Point>(0,-1)},
+    {Direction::RIGHT, makePoint<Point>(0,1)}
+};
+
+template<typename Point>
 Point directionToPair(Direction d){
-    // Another switch
-    // TODO:
-    // Map? Store the information on the data itself
-    // e.g. (Direction is a struct holding a pair).
-    Point step;
-    switch(d){
-        case Direction::UP:
-            step = makePoint<Point>(-1,0);
-            break;
-        case Direction::DOWN:
-            step = makePoint<Point>(1,0);
-            break;
-        case Direction::LEFT:
-            step = makePoint<Point>(0,-1);
-            break;
-        case Direction::RIGHT:
-            step = makePoint<Point>(0,1);
-            break;
-        default:
-            throw SnakeException::UNKNOWN_DIRECTION;
-    }
+    Point step = directionToPoint<Point>[d];
     return step;
 }
 
