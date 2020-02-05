@@ -15,7 +15,7 @@ class Game {
         // Seems to be up to you to choose, but if they are you have to define destructors that handle that memory.
         Snake<> snake;
         Apple<> apple;
-        std::default_random_engine eng {}; 
+        std::default_random_engine eng;        
         void randomizeApplePosition();      
     public:
         Game(unsigned int, unsigned int);
