@@ -18,17 +18,14 @@ bool Snake<Point,Container>::takeStep(Point applePos){
     // May need the tail later - in case apple hit
     Point tail = body[body.size()-1];
     
-    // TODO:
-    // This whole thing can almost certainly be done better.     
-    // The movement is "head follows step, body moves up one"
-    // First do the body  
     for(auto i=body.size()-1;i>0;i--){
         // have to iterate backwards here...
         body[i] = body[i-1];
     }
+
     // Now update the head
-    body[0].first += step.first;
-    body[0].second += step.second;
+    body[0]+=step;
+
     // Wrap through the walls
     // To be on the interior the position needs to be between 1 and boundary-1.
     body[0].first = 1+mod(body[0].first-1,height-2);
@@ -45,6 +42,12 @@ bool Snake<Point,Container>::takeStep(Point applePos){
         body.push_back(tail);
     }
     return appleHit;
+}
+
+template<typename Point>
+void operator+=(Point& pt1,const Point & pt2){
+    pt1.first += pt2.first;
+    pt1.second += pt2.second;
 }
 
 template<typename Point,typename Container>
