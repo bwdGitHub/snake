@@ -12,7 +12,7 @@ template<typename Point,typename Container>
 bool Snake<Point,Container>::takeStep(Point applePos){    
     Point step = directionToPair<>(direction);
     
-    // May need the tail later - in case apple hit
+    // May need the original tail later - in case apple hit
     Point tail = body[body.size()-1];
     
     for(auto i=body.size()-1;i>0;i--){
