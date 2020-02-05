@@ -96,14 +96,12 @@ bool Game::update(char key){
         randomizeApplePosition();
     }
     return snake.hasSelfIntersected;
-
 }
 
 void Game::randomizeApplePosition(){
     std::vector<std::pair<int,int>> viablePositions;
     // TODO:
-    // more bad design -
-    // just loop over all screen positions and don't push back those that are snake.
+    // Is there a more optimized way of doing this?
     for(int i = 1; i<height-1; i++){        
         for(int j = 1; j<width-1; j++){
             std::pair<int,int> p = std::make_pair(i,j);
