@@ -8,9 +8,6 @@
 template<typename Point,typename Container>
 Snake<Point,Container>::Snake(Container b,Direction d, unsigned int h, unsigned int w) : body{b}, direction{d}, height{h}, width{w}, hasSelfIntersected{false} {}
 
-// TODO: 
-// is vector best for popping and inserting at the front?
-// There's probably a nicer way to do it without shifting everything.
 template<typename Point,typename Container>
 bool Snake<Point,Container>::takeStep(Point applePos){    
     Point step = directionToPair<>(direction);
