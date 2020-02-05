@@ -37,16 +37,6 @@ bool Snake<Point,Container>::takeStep(Point applePos){
     // Self intersection logic
     auto iter = find(body.begin()+1,body.end(),body[0]);
     if(iter!=body.end()){
-        // TODO: need to propagate back up to Game or main to say
-        // Game over
-        // A neat hack would be to throw an exception,
-        // catch it in main
-        // and then have the "game over" logic.
-        // That seems like it might be dodgy though.
-        // In any case this is a simple proof of concept for now.
-        // TODO
-        // this needs to print to the curses terminal.
-        //std::cout << "you lose" << "\n";
         hasSelfIntersected = true;
     }
 
