@@ -12,6 +12,7 @@ class Game {
     private:
         std::vector<std::vector<ScreenCode>> screen;
         // TODO: Should member objects be references?
+        // Seems to be up to you to choose, but if they are you have to define destructors that handle that memory.
         Snake<> snake;
         Apple<> apple;
         std::default_random_engine eng {}; 
