@@ -5,6 +5,12 @@
 #include <map>
 #include <chrono>
 
+
+int randomInteger(std::default_random_engine& eng, int start, int end){
+std::uniform_int_distribution<> dist{start,end};
+return dist(eng);
+}
+
 enum class ScreenCode
 {
     EMPTY,
@@ -25,31 +31,35 @@ std::map<ScreenCode,char> renderMap{
     std::make_pair(ScreenCode::SNAKE_HEAD,'X'),
     std::make_pair(ScreenCode::APPLE,'*')};
 
-Snake<> initialSnake(unsigned int h, unsigned int w){
+Snake<> initialSnake(std::default_random_engine& eng, unsigned int h, unsigned int w){
     // Initialize Snake
-    // TODO: do this randomly
-    // TODO: also check it's on-screen
-    std::pair<int,int> body1{1,1};
-    std::pair<int,int> body2{2,1};
-    std::vector<std::pair<int,int>> body;
-    body.push_back(body1);
-    body.push_back(body2);
-    Snake<> snake = Snake<>(body, Direction::UP, h, w);
+    std::pair<int,int> body1{randomInteger(eng,1,h-2),randomInteger(eng,1,w-2)};
+    std::vector<std::pair<int,int>> body{body1};
+    int dir = randomInteger(eng,0,3);
+    Direction d = static_cast<Direction>(dir);
+    Snake<> snake = Snake<> (body, d, h, w);
     return snake;
+}
+
+unsigned long arbitraryNumber(){
+    return std::chrono::high_resolution_clock::now().time_since_epoch()/std::chrono::milliseconds(1);
 }
 
 Game::Game(unsigned int h, unsigned int w):    
     height{h},
     width{w},
-    score{0},
-    snake{initialSnake(h,w)},
-    apple{Apple<>(std::make_pair(-1,-1))}    
+    score{0},    
+    apple{Apple<> (std::make_pair(-1,-1))},
+    snake{Snake<> (std::vector<std::pair<int,int>>{},Direction::UP,h,w)}     
 {
-    // Randomize the first apple
-    // TODO - abstract out this code.
-    auto time = std::chrono::high_resolution_clock::now();
-    auto seed = static_cast<long unsigned int>(time.time_since_epoch().count());
+    // Initialize the seed.
+    unsigned long seed = arbitraryNumber();
     eng.seed(seed);
+
+    // The initial snake and apple are not in random positions as the engine wasn't seeded.
+    // So recreate the snake and 
+    snake = initialSnake(eng,h,w);
+    // Randomize the first apple
     randomizeApplePosition();
     // Initialize "screen" with EMPTY
     for (auto row = 0; row < height; row++)
@@ -185,7 +195,6 @@ void Game::randomizeApplePosition(){
         }
     }
     int n = viablePositions.size();
-    std::uniform_int_distribution<> dist{1,n};
-    int i = dist(eng);
+    int i = randomInteger(eng,1,n);
     apple.position = viablePositions[i];
 }
