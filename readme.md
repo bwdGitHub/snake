@@ -10,6 +10,11 @@ I'm following [Robert Heaton's guide](https://robertheaton.com/2018/12/02/progra
 ### Language
 I treated this as a learning project in C++ after reading [A Tour of C++](http://www.stroustrup.com/tour2.html). Almost certainly I forgot all the important bits, and used what I remembered in wrong and dangerous ways.
 
+### Dependencies
+The only external dependency I used in the source code was [PDCurses](https://pdcurses.org/).
+
+In the test code I used [GoogleTest](https://github.com/google/googletest).
+
 ## Compilation
 Source code will be in the *src* directory.
 
