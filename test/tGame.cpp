@@ -21,15 +21,6 @@ TEST(Game,Int){
     EXPECT_EQ(game.width,w);
 }
 
-TEST(render,NoExcept){   
-    // 4x4 seems to be a sensible minimum - currently unenforced. 
-    // TODO: Why does 4x4 freeze? 5x5 seems to pass the test.
-    // TODO: render prints to std::out, which messes the test log up, would be good to avoid.
-    auto game = Game(5,5);
-    EXPECT_NO_THROW(game.render());
-    EXPECT_EQ(game.height,5);
-}
-
 // TODO:
 // Currently the game seems to exit badly after collecting too many apples
 // Guess: My "viablePositions" for the apple update ends up empty and I try to access it.
