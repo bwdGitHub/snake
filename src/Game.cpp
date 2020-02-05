@@ -5,7 +5,6 @@
 #include <map>
 #include <chrono>
 
-
 int randomInteger(std::default_random_engine& eng, int start, int end){
 std::uniform_int_distribution<> dist{start,end};
 return dist(eng);
@@ -79,28 +78,16 @@ enum class Exception{
     UNKNOWN_KEY
 };
 
-Direction keyToDirection(char key){
-    // Simple switch
-    // Map better?    
-    switch(key){
-        case 'w':
-            return Direction::UP;
-        case 'a':
-            return Direction::LEFT;
-        case 's':
-            return Direction::DOWN;
-        case 'd':
-            return Direction::RIGHT;
-        default:
-            throw Exception::UNKNOWN_KEY;
-    }
-}
+std::map<char, Direction> keyToDirection{
+    {'w',Direction::UP},
+    {'a',Direction::LEFT},
+    {'s',Direction::DOWN},
+    {'d',Direction::RIGHT}
+};
 
-bool Game::update(char key){
-    
-    // TODO: lowercase the key
+bool Game::update(char key){    
     if(key=='w'||key=='a'||key=='s'||key=='d'){
-        Direction newDirection = keyToDirection(key);
+        Direction newDirection = keyToDirection[key];
         snake.setDirection(newDirection);
     }
     bool appleHit = snake.takeStep(apple.position);

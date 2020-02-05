@@ -1,5 +1,6 @@
 #include "FrontEnd.hpp"
 #include <cstring>
+#include <cctype>
 
 std::tuple<int,int,double> inputParse(int argc, char** argv){
     int height = 8;
@@ -82,6 +83,7 @@ bool startScreenWait(WINDOW* win, char startChar, char quitChar){
     bool startGame = false;
     while(!validInput){
         char input = wgetch(win);
+        input = std::tolower(input);
         startGame = input==startChar;
         validInput = startGame || input==quitChar;
     }
@@ -117,6 +119,7 @@ void runGame(Game game, WINDOW* win, WINDOW* scoreWin){
     while (!cursesQuit)
     {
         char input = wgetch(win);
+        input = std::tolower(input);
         cursesQuit = input == 'q';
         if (input == 'r')
         {
