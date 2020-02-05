@@ -113,6 +113,6 @@ void Game::randomizeApplePosition(){
         }
     }
     int n = viablePositions.size();
-    int i = randomInteger(eng,1,n);
+    int i = randomInteger(eng,0,n-1);
     apple.position = viablePositions[i];
 }
