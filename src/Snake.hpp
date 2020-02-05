@@ -4,10 +4,6 @@
 #include <utility>
 #include "Util.hpp"
 
-// TODO:
-// 1. Manually write a wrapper type/interface for the default templates (std::pair<int,int> and std::vector<Point>)
-// 2. Evaluate and test using a different container to std::vector<Point>. I think without 1. such a container will have to have a handful of methods with the same names as std::vector.
-
 enum class Direction{
     UP,
     DOWN,
@@ -28,8 +24,6 @@ Point directionToPair(Direction);
 template<typename Point=std::pair<int,int>, typename Container=std::vector<Point>>
 class Snake{
     Direction direction;
-    // Details of the screen need to be known to let Snake do the bounds checking.
-    // Not sure that's ideal?
     unsigned int height;
     unsigned int width;    
 
