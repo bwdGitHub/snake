@@ -22,14 +22,11 @@ enum class ScreenCode
     APPLE
 };
 
-std::map<ScreenCode,char> renderMap{
-    std::make_pair(ScreenCode::EMPTY,' '),
-    std::make_pair(ScreenCode::VERT_WALL,'|'),
-    std::make_pair(ScreenCode::HORIZ_WALL,'-'),
-    std::make_pair(ScreenCode::CORNER,'+'),
-    std::make_pair(ScreenCode::SNAKE_BODY,'o'),
-    std::make_pair(ScreenCode::SNAKE_HEAD,'X'),
-    std::make_pair(ScreenCode::APPLE,'*')};
+std::map<ScreenCode,const char*> renderMap{
+    std::make_pair(ScreenCode::CORNER,"+"),
+    std::make_pair(ScreenCode::SNAKE_BODY,"o"),
+    std::make_pair(ScreenCode::SNAKE_HEAD,"X"),
+    std::make_pair(ScreenCode::APPLE,"*")};
 
 Snake<> initialSnake(std::default_random_engine& eng, unsigned int h, unsigned int w){
     // Initialize Snake
@@ -61,66 +58,6 @@ Game::Game(unsigned int h, unsigned int w):
     snake = initialSnake(eng,h,w);
     // Randomize the first apple
     randomizeApplePosition();
-    // Initialize "screen" with EMPTY
-    for (auto row = 0; row < height; row++)
-    {
-        std::vector<ScreenCode> column;
-        screen.push_back(column);
-        bool isRowEdge = (row==0)||(row==height-1);
-        for (auto col = 0; col < width; col++)
-        {
-            // TODO:
-            // This is ugly, got to be a better way.
-            bool isColEdge = (col==0)||(col==width-1);
-            bool isCorner = isRowEdge&&isColEdge;
-            ScreenCode c = ScreenCode::EMPTY;
-            if(isCorner){
-                c = ScreenCode::CORNER;
-            }
-            else{
-                if(isColEdge){
-                    c = ScreenCode::VERT_WALL;
-                }
-                if(isRowEdge){
-                    c = ScreenCode::HORIZ_WALL;
-                }
-            }
-            screen[row].push_back(c);            
-        }
-    }
-}
-
-void Game::render()
-{   
-    // Have to clear the screen to kill the previous snake
-    // TODO: Again - got to be a better way.
-    for(auto row = 1; row<height-1; row++){
-        for(auto col = 1; col<width-1; col++){
-            screen[row][col] = ScreenCode::EMPTY;
-        }
-    }
-
-    // Render apple
-    screen[apple.position.first][apple.position.second] = ScreenCode::APPLE;
-
-    // Separate loop over Snake body.
-    // TODO: clean this up, also there's bound to be a better way.
-    std::vector<std::pair<int,int>> body = snake.body;
-    for(auto pos : body){
-        screen[pos.first][pos.second] = ScreenCode::SNAKE_BODY;
-    }
-    // More wastefulness here - just overwrite the head
-    std::pair<int,int> head = snake.head();
-    screen[head.first][head.second] = ScreenCode::SNAKE_HEAD;
-
-    for (auto row = 0; row < height; row++)
-    {
-        for (auto col = 0; col < width; col++)
-        {
-            std::cout << renderMap[screen[row][col]];
-        }
-        std::cout << "\n";
-    }
 }
 
 void Game::cursesRender(WINDOW * win, char input){
@@ -128,17 +65,13 @@ void Game::cursesRender(WINDOW * win, char input){
     // Maybe you can just clear the interior?
     // Or have a separate "interior" window (would make the wrap-around logic easier)
     wclear(win);
-    box(win,0,0);   
+    box(win,0,0);
 
-    // TODO: get the chars from renderMap.
-    //auto appleChar = renderMap[ScreenCode::APPLE];
-    //const char* appleCharPtr = &appleChar;
-
-    mvwprintw(win,apple.position.first,apple.position.second,"*");
+    mvwprintw(win,apple.position.first,apple.position.second,renderMap[ScreenCode::APPLE]);
     for(auto pt:snake.body){
-        mvwprintw(win,pt.first,pt.second,"O");
+        mvwprintw(win,pt.first,pt.second,renderMap[ScreenCode::SNAKE_BODY]);
     }
-    mvwprintw(win,snake.head().first,snake.head().second,"X");
+    mvwprintw(win,snake.head().first,snake.head().second,renderMap[ScreenCode::SNAKE_HEAD]);
     wrefresh(win);    
 }
 
